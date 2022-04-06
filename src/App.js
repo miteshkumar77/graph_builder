@@ -23,10 +23,19 @@ function getWindowDims() {
 Modal.setAppElement("#root");
 
 function App() {
+  // Initial graph representation.
+  // Only used for loading the graph from a file.
   const [decNodeList, updateDecNodeList] = useState(new Object());
-  const { initialNodes, initialEdges } = decListToGraph(decNodeList);
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+
+  useEffect(() => {
+    const { initialNodes, initialEdges } = decListToGraph(decNodeList);
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+  }, [decNodeList]);
+
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalId, setModalId] = useState("");
   const [addingNewNode, setAddingNewNode] = useState(false);
