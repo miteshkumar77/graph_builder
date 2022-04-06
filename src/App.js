@@ -2,6 +2,7 @@ import "./App.css";
 import React, { useState, useCallback, useEffect } from "react";
 import FileInput from "./FileInput";
 import FileDownloader from "./FileDownloader";
+import FlowNode from "./FlowNode";
 import ReactFlow, {
   addEdge,
   applyEdgeChanges,
@@ -17,44 +18,6 @@ function getWindowDims() {
     width,
     height,
   };
-}
-
-function displayNode({
-  name,
-  contents: {
-    display: { prompt, description },
-    keywords,
-  },
-  onNodeModalOpen,
-}) {
-  return (
-    <div className="displayNode" id={name}>
-      <h4>{prompt}</h4>
-
-      {/* <ul>
-        {links.map((e, i) => {
-          <li className="linkList" key={i}>
-            {e}
-          </li>;
-        })}
-      </ul> */}
-
-      <ul className="keywordList">
-        {keywords.map((e, i) => {
-          return (
-            <li className="keywordListComponent" key={i}>
-              {e}
-            </li>
-          );
-        })}
-      </ul>
-      <p className="nodeDescription">
-        <b>Description: </b>
-        {description}
-      </p>
-      <button onClick={(e) => onNodeModalOpen(name)}>Edit</button>
-    </div>
-  );
 }
 
 Modal.setAppElement("#root");
@@ -103,11 +66,9 @@ function App() {
       return {
         id: k,
         data: {
-          label: displayNode({
-            name: k,
-            contents: v,
-            onNodeModalOpen: onNodeModalOpen,
-          }),
+          label: (
+            <FlowNode name={k} contents={v} onNodeModalOpen={onNodeModalOpen} />
+          ),
           store: v,
         },
         position:
@@ -138,22 +99,26 @@ function App() {
         createNew = false;
         nodesCpy[i].name = newNodeValue.name;
         nodesCpy[i].data.store = newNodeValue.contents;
-        nodesCpy[i].data.label = displayNode({
-          name: newNodeValue.name,
-          contents: newNodeValue.contents,
-          onNodeModalOpen: onNodeModalOpen,
-        });
+        nodesCpy[i].data.label = (
+          <FlowNode
+            name={newNodeValue.name}
+            contents={newNodeValue.contents}
+            onNodeModalOpen={onNodeModalOpen}
+          />
+        );
       }
     });
     if (createNew) {
       nodesCpy.push({
         id: newNodeValue.name,
         data: {
-          label: displayNode({
-            name: newNodeValue.name,
-            contents: newNodeValue.contents,
-            onNodeModalOpen: onNodeModalOpen,
-          }),
+          label: (
+            <FlowNode
+              name={newNodeValue.name}
+              contents={newNodeValue.contents}
+              onNodeModalOpen={onNodeModalOpen}
+            />
+          ),
           store: newNodeValue.contents,
         },
         position: { x: width / 2, y: height / 2 },
@@ -274,4 +239,3 @@ function App() {
   );
 }
 export default App;
-
