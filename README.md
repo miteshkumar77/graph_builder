@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# Graph Builder
+A simple graphical tool to construct a set of rules for a rule-based chatbot.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Why a tree
 
-## Available Scripts
+In our design, the client is programmed to send the user's message, as well as the current node_id of the user to the chatbot API. The API will then analyze the message to extract its key words, and then pick the most relevant child node of node_id, in order to determine the next message to respond with. The API will also send back the identifier of the new node, allowing the client to update its current node_id in preparation for the next user message. The more detailed this tree is, the better the chatbot will perform. In general, the tree should reflect the structure of the EDN wiki, but it can deviate from it as well. Please make sure to read the General Guidelines section before attempting to construct your own tree.
 
-In the project directory, you can run:
+## Loading an existing rule spec file
 
-### `npm start`
+Download the attached rule_spec2.json file at the bottom of this page. Drag and drop it near the Choose File button and click submit. This will
+load the tree onto the canvas.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Manipulating the tree
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Adding a new node
 
-### `npm test`
+Add a new node by clicking the Add New Node button at the top. This will bring up a form. To cancel the form,
+press the escape key, or click anywhere outside of the form.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Adding an edge
 
-### `npm run build`
+Click and drag from one node to another in order to add a directional edge. 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Deleting a node
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Click on the node you want to delete, and press back space.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Deleting an edge
 
-### `npm run eject`
+Click on the edge you want to delete, causing it to become bolded, and press back space.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Editing an edge
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Each node will have an edit button, which will open up the same form as the Add New Node button, but with the existing information filled in already. Editing this and saving it will reflect in the new tree.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Saving the tree to a json file
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Scroll all the way to the bottom using the scroll bar on the right (scroll wheel may not work). Then click the Download Rule Spec button.
 
-## Learn More
+## General Guidelines
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. The *unique node id* must be unique, and each tree must have a root node with the id "entry", in order for it to work with the back-end.
+1. The *prompt* is the "message" that the chatbot sends to the user when encountering this node. It should use conversational language.
+1. The list of *web urls* should link to associated pages in the wiki, if any.
+1. The *description* Should provide more details that elaborate on the prompt, and can include what further topics stem from this node.
+1. The *keywords* will be used to match user messages to nodes based on relevance. The chatbot will "follow" the edge that leads to the most relevant node in order to determine the next message to respond to the user with. These keywords don't need to exactly match the user's input, they must only be similar, so there is no need to add multiple forms of the same word (e.g. website, web-site, websites, web site, etc.). The chatbot will be more effective the less similar the keywords of the sibling nodes are. Lastly, the required "entry" node can have an empty keyword list since it will never have any parent nodes.
