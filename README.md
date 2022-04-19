@@ -1,5 +1,5 @@
 # Graph Builder
-A simple graphical tool to construct a set of rules for a rule-based chatbot.
+A simple graphical tool to construct a set of rules for a rule-based chatbot. Completed as part of my semester long Capstone project to build a chatbot to help navigate the course website.
 
 ## Why a tree
 
